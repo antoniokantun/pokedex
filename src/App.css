@@ -487,8 +487,10 @@ h1 {
 
   /* 2. Hacemos el modal más compacto */
   .modal-content {
+    box-sizing: border-box;
     padding: 20px 15px; /* Menos padding horizontal */
     max-height: 95vh;   /* Un poco más de alto si es necesario */
+    width: 80%;
   }
 
   /* 3. Hacemos la imagen más pequeña y la centramos */
