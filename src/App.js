@@ -216,7 +216,7 @@ function App() {
       <div className="search-container">
         <input
           type="text"
-          placeholder="Buscar Pokémon por nombre o ID..."
+          placeholder="Buscar Pokémon por nombre"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)} // Esto actualiza el estado en cada tecla
         />

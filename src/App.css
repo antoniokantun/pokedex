@@ -474,3 +474,70 @@ h1 {
 .capture-button.favorite:hover {
   box-shadow: 0 0 10px #4CAF50;
 }
+
+
+/* --- RESPONSIVIDAD DEL MODAL (MÓVIL) --- */
+
+@media (max-width: 480px) {
+
+  /* 1. Reducimos el padding del fondo */
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  /* 2. Hacemos el modal más compacto */
+  .modal-content {
+    padding: 20px 15px; /* Menos padding horizontal */
+    max-height: 95vh;   /* Un poco más de alto si es necesario */
+  }
+
+  /* 3. Hacemos la imagen más pequeña y la centramos */
+  .modal-content img {
+    width: 150px;
+    height: 150px;
+    margin-top: -30px; /* Reducimos el margen superior */
+  }
+
+  /* 4. Reducimos el tamaño del nombre */
+  .pokemon-name {
+    font-size: 1.5rem;
+    margin: 5px 0;
+  }
+
+  /* 5. Ajustamos el botón de capturar */
+  .capture-button {
+    font-size: 0.7rem;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+  }
+  
+  /* 6. Hacemos la fuente de la info más pequeña */
+  .pokemon-info {
+    font-size: 0.7rem;
+  }
+
+  .info-section h3 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+
+  /* 7. Ajustamos el ancho de las etiquetas de stats */
+  .stats-list span {
+    width: 80px; /* Reducimos de 100px a 80px */
+  }
+
+  /* 8. Ajustamos las barras de stats */
+  .stat-bar-container {
+    height: 8px;
+  }
+
+  /* 9. Ajustamos el botón de cerrar */
+  .close-button {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 0.7rem;
+    line-height: 25px; /* Ajustamos la línea */
+  }
+}
