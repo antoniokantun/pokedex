@@ -1,38 +1,476 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body {
+  /* Aplicar la fuente estilo Pokémon */
+  font-family: 'Press Start 2P', cursive;
+  
+  /* Aplicar el fondo con gradiente animado */
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
+  
+  color: white;
+  text-shadow: 2px 2px #333; /* Sombra para legibilidad */
+  min-height: 100vh;
+}
+
+
 .App {
   text-align: center;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+h1 {
+  font-size: 2.5rem; /* Ajustar tamaño */
+  color: #ffcc00;   /* Amarillo Pokémon */
+  -webkit-text-stroke: 1.5px black; /* Borde de texto estilo logo */
+  text-shadow: 3px 3px #333;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* 3. Contenedor de las tarjetas (Grid o Flexbox) */
+.pokemon-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 20px; /* Espacio entre tarjetas */
+  padding: 20px;
+}
+
+/* 4. Estilo de la tarjeta individual */
+.pokemon-card {
+  background: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px); /* Efecto "vidrio esmerilado" */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: 160px;
+  text-align: center;
+  text-transform: capitalize; /* Pone la primera letra en mayúscula */
+  cursor: pointer;
+}
+
+.pokemon-card img {
+  width: 120px;
+  height: 120px;
+  /* Mantiene el estilo pixelado de los sprites */
+  image-rendering: pixelated; 
+}
+
+.pokemon-card p {
+  font-size: 0.8rem;
+  margin: 10px 0 0;
   color: white;
+  text-shadow: 1px 1px #333;
 }
 
-.App-link {
-  color: #61dafb;
+/* --- Estilos del Modal --- */
+.modal-backdrop {
+  position: fixed; /* Ocupa toda la pantalla */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté al frente */
+  backdrop-filter: blur(5px);
+  padding: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.modal-content {
+  /* Reutilizamos el estilo de la tarjeta pero más grande */
+  background: rgba(40, 40, 60, 0.7); /* Un poco más oscuro */
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh; /* Alto máximo */
+  overflow-y: auto; /* Permite scroll si el contenido es mucho */
+  position: relative; /* Para el botón de cerrar */
+  
+  /* Estilos para el scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #ffcc00 #28283c;
+}
+
+.modal-content img {
+  width: 200px;
+  height: 200px;
+  margin-top: -50px; /* Saca la imagen un poco */
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
+  image-rendering: auto; /* Usamos la imagen de alta calidad */
+}
+
+.pokemon-name {
+  font-size: 2rem;
+  color: #ffcc00;
+  text-transform: capitalize;
+  margin: 10px 0;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  line-height: 30px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: #ffcc00;
+  color: #333;
+  transform: scale(1.1) rotate(90deg);
+}
+
+/* --- Estilos de la Información --- */
+
+.pokemon-info {
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.info-section {
+  margin-bottom: 20px;
+}
+
+.info-section h3 {
+  font-size: 1rem;
+  color: #ffcc00;
+  border-bottom: 2px solid #ffcc00;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+.info-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.info-section li {
+  margin-bottom: 5px;
+  text-transform: capitalize;
+}
+
+/* --- Stats --- */
+.stats-list span {
+  display: inline-block;
+  width: 100px; /* Alinea los nombres de los stats */
+}
+
+.stats-list strong {
+  color: #ffcc00;
+}
+
+.stat-bar-container {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  height: 10px;
+  margin-top: 5px;
+}
+
+.stat-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ffcc00, #e73c7e);
+  border-radius: 5px;
+}
+
+/* --- Types --- */
+.types-container {
+  display: flex;
+  gap: 10px;
+}
+
+.type-badge {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: white;
+  text-shadow: 1px 1px #333;
+}
+
+/* Colores para cada tipo */
+.type-normal { background-color: #A8A878; }
+.type-fire { background-color: #F08030; }
+.type-water { background-color: #6890F0; }
+.type-electric { background-color: #F8D030; }
+.type-grass { background-color: #78C850; }
+.type-ice { background-color: #98D8D8; }
+.type-fighting { background-color: #C03028; }
+.type-poison { background-color: #A040A0; }
+.type-ground { background-color: #E0C068; }
+.type-flying { background-color: #A890F0; }
+.type-psychic { background-color: #F85888; }
+.type-bug { background-color: #A8B820; }
+.type-rock { background-color: #B8A038; }
+.type-ghost { background-color: #705898; }
+.type-dragon { background-color: #7038F8; }
+.type-dark { background-color: #705848; }
+.type-steel { background-color: #B8B8D0; }
+.type-fairy { background-color: #EE99AC; }
+
+/* --- Spinner de Carga --- */
+.loading-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2000;
+  font-size: 1.5rem;
+  color: #ffcc00;
+  text-shadow: 2px 2px #333;
+}
+
+
+/* --- Contenedor de la lista --- */
+.pokemon-list-wrapper {
+  min-height: 50vh; /* Da espacio para que el "Cargando..." se vea */
+  position: relative;
+}
+
+/* --- Estilos del Buscador --- */
+.search-container {
+  margin: 50px auto;
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  max-width: 500px;
+}
+
+.search-container input {
+  width: 100%; 
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  /* Ajustamos el borde-radius que antes compartía con el botón */
+  border-radius: 10px; 
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  outline: none;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+}
+
+.search-container input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Opcional: añade un efecto focus al input */
+.search-container input:focus {
+  border-color: #ffcc00;
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+.search-container button {
+  width: 30%;
+  padding: 12px;
+  border: 2px solid #ffcc00;
+  background: #ffcc00;
+  color: #333;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  text-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.search-container button:hover {
+  background: #e6b800;
+  transform: scale(1.05);
+}
+
+/* --- Estilos de Paginación --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 30px auto;
+}
+
+.pagination-container button {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow: 1px 1px #333;
+}
+
+.pagination-container button:hover:not(:disabled) {
+  background: #ffcc00;
+  color: #333;
+  text-shadow: none;
+  transform: scale(1.1);
+}
+
+.pagination-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- Mensaje de Error --- */
+.error-message {
+  font-size: 1rem;
+  color: #ffcc00;
+  margin-top: 50px;
+}
+
+/* --- Spinner de Carga (ajustado) --- */
+.loading-spinner {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Debajo del modal */
+  font-size: 1.5rem;
+  color: #ffcc00;
+  text-shadow: 2px 2px #333;
+}
+
+
+/* Estilos para pantallas de 480px de ancho o menos */
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 2.2rem; /* Hacemos el título un poco más pequeño */
   }
-  to {
-    transform: rotate(360deg);
+
+  /* 1. Ajustamos el contenedor principal */
+  .pokemon-container {
+    padding: 10px; /* Reducimos el padding general */
+    gap: 10px;     /* Reducimos el espacio entre tarjetas */
   }
+
+  /* 2. Ajustamos las tarjetas para que quepan 2 */
+  .pokemon-card {
+    /* Aquí está la magia:
+      Calculamos el ancho para 2 columnas: 100% / 2 = 50%
+      Luego, restamos la mitad del 'gap' (10px / 2 = 5px)
+      para que el espacio se reparta correctamente.
+    */
+    width: calc(50% - 5px);
+    
+    padding: 10px; /* Reducimos el padding interno de la tarjeta */
+    
+    /* Importante: para que el 'calc' funcione bien con el padding */
+    box-sizing: border-box; 
+  }
+
+  /* 3. Hacemos la imagen y texto más pequeños */
+  .pokemon-card img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .pokemon-card p {
+    font-size: 0.7rem; /* Reducimos el tamaño de la fuente */
+  }
+
+  /* 4. Ajustamos el buscador */
+  .search-container input,
+  .search-container button {
+    font-size: 0.65rem;
+    padding: 10px;
+  }
+
+  /* 5. Ajustamos la paginación */
+  .pagination-container button {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
+}
+
+/* Media query opcional para pantallas muy pequeñas
+  (ej. iPhone 5/SE - 320px) 
+*/
+@media (max-width: 340px) {
+  .pokemon-card p {
+    font-size: 0.6rem; /* Hacemos la fuente aún más pequeña */
+  }
+
+  .pokemon-card img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* Estilo para el botón de notificaciones */
+.notify-button {
+  background: rgba(255, 204, 0, 0.8); /* Amarillo Pokémon */
+  border: none;
+  padding: 10px 15px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.7rem;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #333;
+  text-shadow: none;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.notify-button:hover {
+  background: #ffcc00;
+  transform: scale(1.05);
+}
+
+
+/* --- Estilos del Botón Capturar --- */
+
+.capture-button {
+  background: #f44336; /* Rojo "capturar" */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.8rem;
+  border-radius: 10px;
+  cursor: pointer;
+  text-shadow: 1px 1px #333;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+}
+
+.capture-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #f44336;
+}
+
+/* Estilo cuando ya es favorito */
+.capture-button.favorite {
+  background: #4CAF50; /* Verde "liberar" */
+}
+
+.capture-button.favorite:hover {
+  box-shadow: 0 0 10px #4CAF50;
 }
