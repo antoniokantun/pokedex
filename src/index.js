@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-//import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -11,4 +11,15 @@ root.render(
   </React.StrictMode>
 );
 
-//serviceWorkerRegistration.register();
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Esto registra nuestro archivo de la carpeta 'public'
+    navigator.serviceWorker.register('/service-worker.js') 
+      .then(registration => {
+        console.log('Service Worker registrado con éxito:', registration.scope);
+      })
+      .catch(error => {
+        console.log('Error al registrar el Service Worker:', error);
+      });
+  });
+}
